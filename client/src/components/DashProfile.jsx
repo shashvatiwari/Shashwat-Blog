@@ -69,12 +69,12 @@ export default function DashProfile() {
     uploadTask.on(
       'state_changed',
       (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(`Upload is ${progress}% done`);
         setImageFileUploadProgress(progress.toFixed(0));
       },
       (error) => {
+        console.error('Upload failed:', error);
         setImageFileUploadError(
           'Could not upload image (File must be less than 2MB)'
         );
@@ -85,12 +85,14 @@ export default function DashProfile() {
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log('File available at', downloadURL);
           setImageFileUrl(downloadURL);
           setFormData({ ...formData, profilePicture: downloadURL });
           setImageFileUploading(false);
         });
       }
     );
+    
   };
 
   const handleChange = (e) => {
